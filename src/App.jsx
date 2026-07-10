@@ -53,6 +53,7 @@ export default function RustoriumMenu() {
   const [mapError, setMapError] = useState(false);
 
   const [lang, setLang] = useState('en');
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
   const [onlinePlayers, setOnlinePlayers] = useState(0);
@@ -62,6 +63,7 @@ export default function RustoriumMenu() {
 
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const audioRef = useRef(null);
+  const langMenuRef = useRef(null);
 
   const serverName = 'RUSTORIUM | EU 2X VANILLA | TRIO #1';
   const serverIp = 'client.connect 213.14.128.140:28015';
@@ -79,6 +81,17 @@ export default function RustoriumMenu() {
   };
   
   const battleMetricsId = '39810262';
+
+  // Dışarı tıklandığında menüyü kapatma
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
+        setLangMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const calculateNextWipe = () => {
@@ -417,13 +430,16 @@ export default function RustoriumMenu() {
     ]
   }[lang];
 
-  const handleLangCycle = () => {
-    const cycle = { en: 'tr', tr: 'de', de: 'fr', fr: 'pl', pl: 'en' };
-    setLang(cycle[lang]);
-  };
+  const languages = [
+    { code: 'en', label: 'English' },
+    { code: 'tr', label: 'Türkçe' },
+    { code: 'de', label: 'Deutsch' },
+    { code: 'fr', label: 'Français' },
+    { code: 'pl', label: 'Polski' }
+  ];
 
-  const renderFlag = () => {
-    switch (lang) {
+  const renderFlag = (lCode) => {
+    switch (lCode) {
       case 'tr':
         return (
           <svg className="w-5 h-3.5 rounded-[2px] shadow-sm flex-shrink-0" viewBox="0 0 1200 800">
@@ -534,14 +550,38 @@ export default function RustoriumMenu() {
         </div>
 
         <div className="flex items-center gap-2 h-full pr-4">
-          <button
-            onClick={handleLangCycle}
-            className="h-9 px-3.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 flex items-center gap-2 text-[11px] font-['JetBrains_Mono'] font-bold text-[#d9a441] backdrop-blur-md transition-all"
-            title="Switch Language"
-          >
-            {renderFlag()}
-            <span>{lang.toUpperCase()}</span>
-          </button>
+          {/* DROPDOWN LANGUAGE SELECTOR */}
+          <div className="relative" ref={langMenuRef}>
+            <button
+              onClick={() => setLangMenuOpen((prev) => !prev)}
+              className="h-9 px-3.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 flex items-center gap-2 text-[11px] font-['JetBrains_Mono'] font-bold text-[#d9a441] backdrop-blur-md transition-all outline-none"
+              title="Select Language"
+            >
+              {renderFlag(lang)}
+              <span>{lang.toUpperCase()}</span>
+              <ChevronDown className={`w-3.5 h-3.5 text-[#d9a441] transition-transform ${langMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {langMenuOpen && (
+              <div className="absolute right-0 mt-2 w-36 bg-[#141210]/95 backdrop-blur-2xl border border-white/10 rounded-xl overflow-hidden shadow-2xl z-50 py-1">
+                {languages.map((l) => (
+                  <button
+                    key={l.code}
+                    onClick={() => {
+                      setLang(l.code);
+                      setLangMenuOpen(false);
+                    }}
+                    className={`w-full px-3.5 py-2.5 flex items-center gap-2.5 text-left text-[11px] font-['JetBrains_Mono'] font-medium transition-colors ${
+                      lang === l.code ? 'bg-white/15 text-white font-bold' : 'text-[#c9c2b6] hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    {renderFlag(l.code)}
+                    <span>{l.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <a
             href={discordUrl}
