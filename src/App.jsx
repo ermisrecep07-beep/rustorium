@@ -4,7 +4,7 @@ import {
   Copy, Check, Sparkles, MessageCircle,
   ShieldCheck, Lock, ChevronDown,
   Map, Volume2, VolumeX, MapPin, ExternalLink,
-  Palette, Flame, Layers, RefreshCw, HelpCircle, Globe, Clock, Flag
+  Palette, Flame, Layers, RefreshCw, HelpCircle, Globe, Clock, Shield
 } from 'lucide-react';
 
 function FontLoader() {
@@ -82,7 +82,6 @@ export default function RustoriumMenu() {
   
   const battleMetricsId = '39810262';
 
-  // Dışarı tıklandığında menüyü kapatma
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
@@ -489,7 +488,6 @@ export default function RustoriumMenu() {
     <div className="h-screen w-screen relative overflow-hidden text-[#e9e2d3] select-none bg-[#0c0b0a] font-['Inter',system-ui,sans-serif]">
       <FontLoader />
 
-      {/* 1. KATMAN: Optimize Edilmiş Video Arkaplanı */}
       <video 
         autoPlay 
         loop 
@@ -503,7 +501,6 @@ export default function RustoriumMenu() {
       
       <audio ref={audioRef} loop src="/music.mp3" preload="auto" />
 
-      {/* 2. KATMAN: Atmosferik Gradyan ve Vignette (Kenar Karartma) Katmanı */}
       <div 
         className="absolute inset-0 z-[4] pointer-events-none"
         style={{
@@ -514,17 +511,19 @@ export default function RustoriumMenu() {
         }}
       ></div>
 
-      {/* 3. KATMAN: Rust Grain / Korozyon Efekti */}
       <RustGrain />
 
       {/* TOP NAVIGATION BAR */}
       <nav className="absolute top-0 left-0 w-full h-[60px] bg-black/40 backdrop-blur-2xl flex items-center justify-between z-50 border-b border-white/10 shadow-lg">
         <div className="flex items-center h-full pl-3 gap-1">
+          {/* GÜNCELLENMİŞ LOGO */}
           <div 
-            className="w-10 h-10 bg-gradient-to-br from-[#cf4520] to-[#9c3216] flex items-center justify-center cursor-pointer shadow-lg shadow-[#cf4520]/20 mr-3 transition-transform hover:scale-105"
-            style={{ clipPath: 'polygon(0 0, 100% 0, 80% 50%, 100% 100%, 0 100%)' }}
+            className="w-10 h-10 rounded-xl bg-[#cf4520] flex items-center justify-center cursor-pointer shadow-lg shadow-[#cf4520]/20 mr-3 transition-transform hover:scale-105"
           >
-            <Flag className="w-4 h-4 text-white ml-[-2px]" />
+            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <rect x="4.5" y="4.5" width="15" height="15" rx="2" transform="rotate(45 12 12)" />
+              <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+            </svg>
           </div>
 
           <span className="font-['Oswald'] font-semibold text-base tracking-[0.2em] mr-4">
@@ -550,7 +549,6 @@ export default function RustoriumMenu() {
         </div>
 
         <div className="flex items-center gap-2 h-full pr-4">
-          {/* DROPDOWN LANGUAGE SELECTOR */}
           <div className="relative" ref={langMenuRef}>
             <button
               onClick={() => setLangMenuOpen((prev) => !prev)}
@@ -751,7 +749,7 @@ export default function RustoriumMenu() {
         </div>
       )}
 
-      {/* HOME with NEW CLEAN SEASON INDICATOR */}
+      {/* HOME */}
       {activeTab === 'home' && (
         <div className="absolute inset-0 top-[60px] z-10">
           <div className="absolute inset-0 top-0 flex items-end justify-between px-8 pb-20">
